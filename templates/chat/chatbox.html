@@ -1,0 +1,39 @@
+<div class="chat_box is-flex is-flex-direction-column is-justify-content-space-between">
+    <div class="top-bar">
+        <div class="avatar"><p>V</p></div>
+        <div class="name">Voldemort</div>
+        <div class="icons">
+            <i class="fas fa-phone"></i>
+            <i class="fas fa-video"></i>
+        </div>
+        <div class="chat_menu">
+            <div class="dots"></div>
+        </div>
+    </div>
+    <div class="middle" id="messages_container">
+        <div class="messages">
+            <div class="bubble incoming">Hey, Father's Day is coming up..</div>
+            <div class="bubble incoming">What are you getting.. Oh, oops sorry dude.</div>
+            <div class="bubble outgoing">Nah, it's cool.</div>
+            <div class="bubble outgoing">Well you should get your Dad a cologne. Here smell it. Oh wait! ...</div>
+            <div class="bubble incoming typing">
+                <div class="ellipsis one"></div>
+                <div class="ellipsis two"></div>
+                <div class="ellipsis three"></div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-bar">
+        <div class="text">
+            <input class="chat_input" type="text" placeholder="Type a message..."/>
+            <button class="chat_button" type="submit">Send</button>
+        </div>
+    </div>
+</div>
+<script>
+    const messages_container = document.getElementById("messages_container");
+
+    function positionMessages() {
+        messages_container.scrollTop = messages_container.scrollHeight;
+    }
+</script>
