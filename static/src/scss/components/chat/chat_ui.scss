@@ -11,10 +11,9 @@ $primary: #5a86e4;
 
 .chat {
   position: fixed;
-  $chatBoxHeight: 50%;
   bottom: 2%;
   z-index: 5;
-  left: 5%;
+  left: 2%;
 }
 
 .chat_container {
@@ -52,7 +51,7 @@ $primary: #5a86e4;
   gap: 5px;
   height: fit-content;
 
-  >:last-child{
+  > :last-child {
     margin-bottom: 5px;
   }
 
@@ -61,6 +60,7 @@ $primary: #5a86e4;
     height: 10%;
     display: grid;
     place-items: center;
+    position: relative;
   }
 
   .people {
@@ -93,6 +93,50 @@ $primary: #5a86e4;
   }
 }
 
+.user-profile {
+  height: 10%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.close-chat {
+  border: none;
+  outline: none;
+  background: unset;
+  border-radius: 0;
+  position: absolute;
+  right: 10px;
+  margin-right: 40px;
+  margin-left: auto;
+  cursor: pointer;
+  width: 50px;
+    height: 50px;
+
+  .ex {
+    &:after,
+    &:before {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 4px;
+      background: $white;
+      top: 50%;
+    }
+
+    &:after {
+      transform: rotate(45deg);
+    }
+
+    &:before {
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+
 .person {
   padding: 12px 0 12px 12px;
   border-bottom: 1px solid $primary;
@@ -110,24 +154,19 @@ $primary: #5a86e4;
   margin-left: 1px;
 }
 
-.name2 {
+.user-name {
   text-transform: uppercase;
   color: $primary;
   letter-spacing: 2px;
   font-weight: 500;
-  height: 30px;
-  text-align: center;
-  padding-top: 20px;
-  padding-bottom: 20px;
 
   &:after {
     position: absolute;
     content: '';
-    display: block;
     width: 100%;
     height: 2px;
     background: $primary;
-    margin-top: 10px;
+    top: 50px;
     left: 0;
   }
 }

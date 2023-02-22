@@ -46,30 +46,30 @@
                     </section>
                     <section class="info-tiles">
                         <div class="tile is-ancestor has-text-centered">
-                            <div class="tile is-parent">
+                            <a class="tile is-parent" href="{% url 'TicketingApp:create' %}">
                                 <article class="tile is-child box">
-                                    <p class="title">10</p>
+                                    <p class="title">{{ tickets.count }}</p>
                                     <p class="subtitle">New Tickets</p>
                                 </article>
-                            </div>
-                            <div class="tile is-parent">
+                            </a>
+                            <a class="tile is-parent">
                                 <article class="tile is-child box">
-                                    <p class="title">5</p>
+                                    <p class="title">{{ pending.count }}</p>
                                     <p class="subtitle">Pending Tickets</p>
                                 </article>
-                            </div>
-                            <div class="tile is-parent">
+                            </a>
+                            <a class="tile is-parent">
                                 <article class="tile is-child box">
-                                    <p class="title">200</p>
+                                    <p class="title">{{ resolved.count }}</p>
                                     <p class="subtitle">Resolved</p>
                                 </article>
-                            </div>
-                            <div class="tile is-parent">
+                            </a>
+                            <a class="tile is-parent">
                                 <article class="tile is-child box">
-                                    <p class="title">19</p>
+                                    <p class="title">{{ exceptions.count }}</p>
                                     <p class="subtitle">Exceptions</p>
                                 </article>
-                            </div>
+                            </a>
                         </div>
                     </section>
                     <div class="columns">
@@ -89,60 +89,16 @@
                                     <div class="content">
                                         <table class="table is-fullwidth is-striped">
                                             <tbody>
-                                            <tr>
-                                                <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                                <td>Lorum ipsum dolem aire</td>
-                                                <td class="level-right"><a class="button is-small is-primary"
-                                                                           href="#">Action</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                                <td>Lorum ipsum dolem aire</td>
-                                                <td class="level-right"><a class="button is-small is-primary"
-                                                                           href="#">Action</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                                <td>Lorum ipsum dolem aire</td>
-                                                <td class="level-right"><a class="button is-small is-primary"
-                                                                           href="#">Action</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                                <td>Lorum ipsum dolem aire</td>
-                                                <td class="level-right"><a class="button is-small is-primary"
-                                                                           href="#">Action</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                                <td>Lorum ipsum dolem aire</td>
-                                                <td class="level-right"><a class="button is-small is-primary"
-                                                                           href="#">Action</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                                <td>Lorum ipsum dolem aire</td>
-                                                <td class="level-right"><a class="button is-small is-primary"
-                                                                           href="#">Action</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                                <td>Lorum ipsum dolem aire</td>
-                                                <td class="level-right"><a class="button is-small is-primary"
-                                                                           href="#">Action</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                                <td>Lorum ipsum dolem aire</td>
-                                                <td class="level-right"><a class="button is-small is-primary"
-                                                                           href="#">Action</a></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="5%"><i class="fa fa-bell-o"></i></td>
-                                                <td>Lorum ipsum dolem aire</td>
-                                                <td class="level-right"><a class="button is-small is-primary"
-                                                                           href="#">Action</a></td>
-                                            </tr>
+                                            {% for item in tickets %}
+                                                <tr>
+                                                    <td width="5%"><i class="fa fa-bell-o"></i></td>
+                                                    <td>{{ item.issue }}</td>
+                                                    <td>{{ item.safaricom_no }}</td>
+                                                    <td class="level-right">
+                                                        <a class="button is-small is-primary" href="{% url 'TicketingApp:view' item.id %}">View</a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
                                             </tbody>
                                         </table>
                                         `

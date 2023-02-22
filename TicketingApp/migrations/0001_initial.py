@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=30)),
                 ('paybill_no', models.CharField(max_length=15)),
                 ('airtel_no', models.CharField(max_length=15)),
-                ('issues', models.CharField(choices=[('EA', 'Excess Airtime'), ('BWN', 'Buying To Wrong Number'), ('NC', 'Not Credited'), ('O', 'Others')], max_length=3)),
+                ('issue', models.CharField(choices=[('EA', 'Excess Airtime'), ('BWN', 'Buying To Wrong Number'), ('NC', 'Not Credited'), ('O', 'Others')], max_length=3)),
                 ('amount', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('resolved_at', models.DateTimeField(blank=True, null=True)),

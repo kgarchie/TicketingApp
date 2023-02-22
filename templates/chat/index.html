@@ -1,25 +1,40 @@
-<div class="chat_container">
-    <div class="is-flex is-flex-direction-column message-list">
-        <div class="profile">
-            <div class="name2">Admin</div>
+<div class="chat_container not_active">
+    <div class="user-profile" style="width: 100%">
+        <div class="user-name is-flex is-align-items-center">Admin
+            <button class="close-chat not_active" style="cursor: pointer">
+                <span class="ex"></span>
+            </button>
         </div>
+    </div>
+    <div class="is-flex is-flex-direction-column message-list">
         <ul class="people">
-            <li class="person">
-                <span class="chat_title">Voldemort </span>
-                <span class="time">2:50pm</span><br>
-                <span class="preview">What are you getting... Oh, oops...</span>
-            </li>
-            <li class="person">
-                <span class="chat_title">Ron</span>
-                <span class="time">2:25pm</span><br>
-                <span class="preview">Meet me at Hogsmeade and bring...</span>
-            </li>
-            <li class="person">
-                <span class="chat_title">Hermione</span>
-                <span class="time">2:12pm</span><br>
-                <span class="preview">Have you and Ron done your hom...</span>
-            </li>
+            {% for chat in chats %}
+                <li class="person">
+                    <span class="chat_title">{{ chat.to_user }}</span>
+                    <span class="time">{{ chat.created_at }}</span><br>
+                    <span class="preview">{{ chat.message_set.latest }}</span>
+                </li>
+            {% endfor %}
         </ul>
     </div>
-    {% include 'chat/chatbox.html' %}
 </div>
+<script>
+    // When user clicks on a chat, show the chat box in JS
+    const persons = document.querySelectorAll('.person');
+    const chat_container = document.querySelector('.chat_container');
+
+    let close_chat = document.querySelector('.close-chat');
+
+    close_chat.addEventListener('click', () => {
+        try {
+            const chat_container = document.querySelector('.chat_container');
+            let close_chat = document.querySelector('.close-chat');
+
+            chat_container.classList.toggle('not_active');
+            chatButton.classList.toggle('not_active');
+            close_chat.classList.toggle('not_active');
+        } catch (e) {
+            console.log(e);
+        }
+    });
+</script>

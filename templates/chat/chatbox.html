@@ -1,7 +1,7 @@
 <div class="chat_box is-flex is-flex-direction-column is-justify-content-space-between">
     <div class="top-bar">
-        <div class="avatar"><p>V</p></div>
-        <div class="name">Voldemort</div>
+        <div class="avatar"><p></p></div>
+        <div class="name" id=""></div>
         <div class="icons">
             <i class="fas fa-phone"></i>
             <i class="fas fa-video"></i>
@@ -11,12 +11,8 @@
         </div>
     </div>
     <div class="middle" id="messages_container">
-        <div class="messages">
-            <div class="bubble incoming">Hey, Father's Day is coming up..</div>
-            <div class="bubble incoming">What are you getting.. Oh, oops sorry dude.</div>
-            <div class="bubble outgoing">Nah, it's cool.</div>
-            <div class="bubble outgoing">Well you should get your Dad a cologne. Here smell it. Oh wait! ...</div>
-            <div class="bubble incoming typing">
+        <div class="messages" id="chat_box">
+            <div class="bubble incoming typing" id="typing_indicator">
                 <div class="ellipsis one"></div>
                 <div class="ellipsis two"></div>
                 <div class="ellipsis three"></div>
@@ -25,15 +21,67 @@
     </div>
     <div class="bottom-bar">
         <div class="text">
-            <input class="chat_input" type="text" placeholder="Type a message..."/>
+            <input id="chat_input" class="chat_input" type="text" placeholder="Type a message..."/>
             <button class="chat_button" type="submit">Send</button>
         </div>
     </div>
 </div>
 <script>
     const messages_container = document.getElementById("messages_container");
+    const typing_indicator = document.getElementById("typing_indicator");
+    const chat_input = document.getElementById("chat_input");
+
+    typing_indicator.style.display = "none";
 
     function positionMessages() {
         messages_container.scrollTop = messages_container.scrollHeight;
     }
+
+
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chat/' + {{ user.username }} +'/' + {{ chatting_with.username }} + '/'
+    );
+
+    // when message is received from websocket add it to the chatbox
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        // check if message is of typing indicator or data
+        if (data.type === "typing") {
+            typing_indicator.style.display = "grid";
+        } else {
+            typing_indicator.style.display = "none";
+            const message = data.message;
+            const username = data.username;
+            const chat_box = document.getElementById("chat_box");
+            const bubble = document.createElement("div");
+            bubble.classList.add("bubble");
+            if (username === "{{ user.username }}") {
+                bubble.classList.add("outgoing");
+            } else {
+                bubble.classList.add("incoming");
+            }
+            bubble.innerHTML = message;
+            chat_box.appendChild(bubble);
+        }
+        positionMessages();
+    };
+
+    // when user types in the input field send a message to the websocket to notify other users
+    chat_input.addEventListener("keyup", function (e) {
+        let key
+        if (e.code === "Enter" || e.code === "NumpadEnter") {
+            chatSocket.send(JSON.stringify({
+                'message': chat_input.value,
+                'username': "{{ user.username }}"
+            }));
+            chat_input.value = "";
+        } else {
+            chatSocket.send(JSON.stringify({
+                'type': "typing",
+                'username': "{{ user.username }}"
+            }));
+        }
+    });
 </script>
