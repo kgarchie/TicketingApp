@@ -43,7 +43,6 @@
                     Tickets
                 </a>
             </div>
-
         </div>
     </div>
 </nav>
@@ -51,6 +50,15 @@
 
 {% endblock %}
 <div class="chat">
+    <style>
+        .chat-button {
+            opacity: 0.3;
+        }
+
+        .chat-button:hover {
+            opacity: 1;
+        }
+    </style>
     <div class="chat-button">
         <button class="button is-primary">Chat</button>
     </div>
@@ -71,6 +79,37 @@
             console.log(e);
         }
     });
+
+    // connect to notification and chat channel and listen for notifications and messages
+    let user_id = '';
+    // get user id from session or from user object if user is authenticated
+    {% if user.is_authenticated %}
+        user_id = '{{ user.id }}';
+    {% else %}
+        user_id = '{{ request.session.user_id }}';
+    {% endif %}
+
+    if (user_id !== '') {
+        const socket = new WebSocket(
+            'ws://' + window.location.host +
+            '/ws/notifications/' + user_id + '/');
+
+        socket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            let is_notification = data['is_notification'];
+
+            if (is_notification) {
+                const notification = data['notification'];
+                console.log(notification);
+            } else {
+                const message = data['message'];
+                console.log(message);
+            }
+        };
+    } else {
+        console.log('Error getting or generating user id');
+        console.log('User id: ' + user_id);
+    }
 </script>
 </body>
 </html>

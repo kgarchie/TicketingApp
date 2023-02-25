@@ -169,3 +169,9 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ASGI_APPLICATION = "LeizamTicketer.asgi.application"
+
+AUTHENTICATION_BACKENDS = ['TicketingApp.auth.custom_auth']
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+
+SESSION_FILE_PATH = BASE_DIR / 'sessions'

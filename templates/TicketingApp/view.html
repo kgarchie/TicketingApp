@@ -3,94 +3,123 @@
     {% if ticket %}{{ ticket.issue }}|{{ ticket.safaricom_no }}{% else %} Tickets {% endif %}
 {% endblock %}
 {% block content %}
+
     {% if ticket %}
 
     {% else %}
-        <div class="panel container">
-            <div class="panel-heading">
-                Tickets
+        <main class="container">
+            <div class="columns">
+                {% include 'TicketingApp/side_nav.html' %}
+                <div class="column">
+                    {% include 'TicketingApp/nav_tree.html' %}
+                    <div class="panel">
+                        <div class="panel-heading">
+                            Tickets
+                        </div>
+                        <div class="panel-block">
+                            <p class="control has-icons-left">
+                                <input class="input" type="text" placeholder="Search">
+                            </p>
+                        </div>
+                        <div class="panel-block tabs is-centered is-boxed">
+                            <ul>
+                                <li class="is-active">
+                                    <a>
+                                        <span>All</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <span>Pending</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <span>Resolved</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a>
+                                        <span>Exceptions</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-block is-flex is-justify-content-center is-flex-direction-column">
+                            <table class="table is-bordered is-striped is-truncated">
+                                <thead>
+                                <tr>
+                                    <th width="120">Action</th>
+                                    <th width="100">Paybill</th>
+                                    <th width="100">Issue</th>
+                                    <th width="100">Reference</th>
+                                    <th width="100">Amount</th>
+                                    <th width="100">Date</th>
+                                    <th width="163">Safaricom</th>
+                                    <th width="163">Airtel</th>
+                                    <th width="120">Urgency</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in tickets %}
+                                    <tr>
+                                        <td class="is-flex is-justify-content-space-between">
+                                            <form action="{% url 'TicketingApp:resolve' item.id %}" class="inline"
+                                                  method="post">
+                                                {% csrf_token %}
+                                                {% if item.status != 'R' and item.status != 'C' %}
+                                                    <button class="button is-success">✓</button>
+                                                {% else %}
+                                                    <button class="button is-success" disabled>✓</button>
+                                                {% endif %}
+                                            </form>
+                                            <form class="inline" action="{% url 'TicketingApp:close' item.id %}"
+                                                  method="post">
+                                                {% csrf_token %}
+                                                {% if item.status != 'C' %}
+                                                    <button class="button is-warning">𐌗</button>
+                                                {% else %}
+                                                    <button class="button is-warning" disabled>𐌗</button>
+                                                {% endif %}
+                                            </form>
+                                            {#                                            <form class="inline" method="post"#}
+                                            {#                                                  action="{% url 'TicketingApp:delete' item.id %}">#}
+                                            {#                                                {% csrf_token %}#}
+                                            {#                                                <button class="button is-danger">ǃ</button>#}
+                                            {#                                            </form>#}
+                                        </td>
+                                        <td>{{ item.paybill_no }}</td>
+                                        <td>{{ item.issue }}</td>
+                                        <td>{{ item.reference }}</td>
+                                        <td>{{ item.amount }}</td>
+                                        <td>{{ item.transaction_date }}</td>
+                                        <td>{{ item.safaricom_no }}</td>
+                                        <td>{{ item.airtel_no }}</td>
+                                        <td>{{ item.urgency }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                                <a class="pagination-previous">Previous</a>
+                                <a class="pagination-next">Next</a>
+                                <ul class="pagination-list">
+                                    {% if tickets.has_previous %}
+                                        <li><a class="pagination-link" aria-label="Goto page 45"
+                                               href="?page={{ tickets.previous_page_number }}">Prev</a></li>
+                                    {% endif %}
+                                    <li><a class="pagination-link is-current" aria-label="Page 46"
+                                           aria-current="page">{{ tickets.number }}</a></li>
+                                    {% if tickets.has_next %}
+                                        <li><a class="pagination-link" aria-label="Goto page 47"
+                                               href="?page={{ tickets.next_page_number }}">Next</a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="panel-block">
-                <p class="control has-icons-left">
-                    <input class="input" type="text" placeholder="Search">
-                </p>
-            </div>
-            <div class="panel-block tabs is-centered is-boxed">
-                <ul>
-                    <li class="is-active">
-                        <a>
-                            <span>All</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <span>Pending</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <span>Resolved</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a>
-                            <span>Exceptions</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="panel-block is-flex is-justify-content-center is-flex-direction-column">
-                <table class="table is-bordered is-striped is-truncated">
-                    <thead>
-                    <tr>
-                        <th width="163">Action</th>
-                        <th>Paybill</th>
-                        <th>Issue</th>
-                        <th>Reference</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Safaricom</th>
-                        <th>Airtel</th>
-                        <th>Urgency</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for item in tickets %}
-                        <tr>
-                            <td>
-                                <button class="button is-success">✓</button>
-                                <button class="button is-warning">𐌗</button>
-                                <button class="button is-danger">ǃ</button>
-                            </td>
-                            <td>{{ item.paybill_no }}</td>
-                            <td>{{ item.issue }}</td>
-                            <td>{{ item.reference }}</td>
-                            <td>{{ item.amount }}</td>
-                            <td>{{ item.date }}</td>
-                            <td>{{ item.safaricom_no }}</td>
-                            <td>{{ item.airtel_no }}</td>
-                            <td>{{ item.urgency }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-                    <a class="pagination-previous">Previous</a>
-                    <a class="pagination-next">Next</a>
-                    <ul class="pagination-list">
-                        {% if tickets.has_previous %}
-                            <li><a class="pagination-link" aria-label="Goto page 45"
-                                   href="?page={{ tickets.previous_page_number }}">Prev</a></li>
-                        {% endif %}
-                        <li><a class="pagination-link is-current" aria-label="Page 46"
-                               aria-current="page">{{ tickets.number }}</a></li>
-                        {% if tickets.has_next %}
-                            <li><a class="pagination-link" aria-label="Goto page 47"
-                                   href="?page={{ tickets.next_page_number }}">Next</a></li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            </div>
-        </div>
+        </main>
     {% endif %}
 {% endblock %}

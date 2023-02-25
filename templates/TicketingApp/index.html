@@ -14,24 +14,9 @@
     <main class="main">
         <div class="container">
             <div class="columns">
-                <div class="column is-2">
-                    <aside class="menu is-hidden-mobile is-flex is-flex-direction-column">
-                        <p class="menu-label">
-                            General
-                        </p>
-                        <ul class="menu-list">
-                            <li><a class="is-active">Dashboard</a></li>
-                            <li><a>Chat History</a></li>
-                            <li><a>Other</a></li>
-                        </ul>
-                    </aside>
-                </div>
+                {% include 'TicketingApp/side_nav.html' %}
                 <div class="column is-9">
-                    <nav class="breadcrumb" aria-label="breadcrumbs">
-                        <ul>
-                            <li><a href="../" class="is-active" aria-current="page">Home</a></li>
-                        </ul>
-                    </nav>
+                    {% include 'TicketingApp/nav_tree.html' %}
                     <section class="hero is-info welcome is-small">
                         <div class="hero-body">
                             <div class="container">
@@ -39,32 +24,32 @@
                                     Hello,
                                 </h1>
                                 <h2 class="subtitle">
-                                    I hope you are having a great day!
+                                    You have 0 new notifications
                                 </h2>
                             </div>
                         </div>
                     </section>
                     <section class="info-tiles">
                         <div class="tile is-ancestor has-text-centered">
-                            <a class="tile is-parent" href="{% url 'TicketingApp:create' %}">
+                            <a class="tile is-parent" href="{% url 'TicketingApp:tickets' "new" %}">
                                 <article class="tile is-child box">
                                     <p class="title">{{ tickets.count }}</p>
                                     <p class="subtitle">New Tickets</p>
                                 </article>
                             </a>
-                            <a class="tile is-parent">
+                            <a class="tile is-parent" href="{% url 'TicketingApp:tickets' "pending" %}">
                                 <article class="tile is-child box">
                                     <p class="title">{{ pending.count }}</p>
                                     <p class="subtitle">Pending Tickets</p>
                                 </article>
                             </a>
-                            <a class="tile is-parent">
+                            <a class="tile is-parent" href="{% url 'TicketingApp:tickets' 'resolved' %}">
                                 <article class="tile is-child box">
                                     <p class="title">{{ resolved.count }}</p>
                                     <p class="subtitle">Resolved</p>
                                 </article>
                             </a>
-                            <a class="tile is-parent">
+                            <a class="tile is-parent" href="{% url 'TicketingApp:tickets' "exceptions" %}">
                                 <article class="tile is-child box">
                                     <p class="title">{{ exceptions.count }}</p>
                                     <p class="subtitle">Exceptions</p>
@@ -95,7 +80,8 @@
                                                     <td>{{ item.issue }}</td>
                                                     <td>{{ item.safaricom_no }}</td>
                                                     <td class="level-right">
-                                                        <a class="button is-small is-primary" href="{% url 'TicketingApp:view' item.id %}">View</a>
+                                                        <a class="button is-small is-primary"
+                                                           href="{% url 'TicketingApp:view' item.id %}">View</a>
                                                     </td>
                                                 </tr>
                                             {% endfor %}
@@ -105,7 +91,8 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <a href="#" class="card-footer-item">View All</a>
+                                    <a href="{% url 'TicketingApp:tickets' "new" %}" class="card-footer-item">View
+                                        All</a>
                                 </div>
                             </div>
                         </div>
@@ -121,10 +108,13 @@
                   </span>
                                     </a>
                                 </header>
-                                <div class="card-content">
+                                <form class="card-content" action="{% url 'TicketingApp:search_by_transaction_code' %}">
+                                    {% csrf_token %}
                                     <div class="content">
                                         <div class="control has-icons-left has-icons-right">
-                                            <input class="input" type="text" placeholder="Enter Transaction Code">
+                                            <input class="input" type="text"
+                                                   placeholder="Enter Transaction Code or Reference"
+                                                   name="search_transaction_code_or_reference">
                                             <span class="icon is-medium is-left">
                       <i class="fa fa-search"></i>
                     </span>
@@ -133,7 +123,7 @@
                     </span>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                             <div class="card">
                                 <header class="card-header">
@@ -141,25 +131,55 @@
                                         User Search
                                     </p>
                                     <a href="#" class="card-header-icon" aria-label="more options">
-                  <span class="icon">
-                    <i class="fa fa-angle-down" aria-hidden="true"></i>
-                  </span>
+                                      <span class="icon">
+                                        <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                      </span>
                                     </a>
                                 </header>
-                                <div class="card-content">
+                                <form class="card-content" action="{% url 'TicketingApp:search_by_general_info' %}">
+                                    {% csrf_token %}
                                     <div class="content">
                                         <div class="control has-icons-left has-icons-right">
                                             <input class="input" type="text"
-                                                   placeholder="Enter Phone Number or Name(s)">
+                                                   placeholder="Enter Phone Number or Name(s)"
+                                                   name="general_search_tag">
                                             <span class="icon is-medium is-left">
-                      <i class="fa fa-search"></i>
-                    </span>
+                                                <i class="fa fa-search"></i>
+                                            </span>
                                             <span class="icon is-medium is-right">
-                      <i class="fa fa-check"></i>
-                    </span>
+                                                <i class="fa fa-check"></i>
+                                            </span>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
+                            </div>
+                            <div class="card">
+                                <header class="card-header">
+                                    <p class="card-header-title">
+                                        Search Date Range
+                                    </p>
+                                    <a href="#" class="card-header-icon" aria-label="more options">
+                                      <span class="icon">
+                                        <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                      </span>
+                                    </a>
+                                </header>
+                                <form class="card-content" action="{% url 'TicketingApp:search_by_date' %}">
+                                    {% csrf_token %}
+                                    <div class="content is-flex is-justify-content-space-around">
+                                        <div class="control">
+                                            From:
+                                            <input class="input" type="date" name="date_search_from">
+                                        </div>
+                                        <div class="control">
+                                            To:
+                                            <input type="date" name="date_search_to" class="input">
+                                        </div>
+                                    </div>
+                                    <button class="button">
+                                        Search
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

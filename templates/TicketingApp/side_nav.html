@@ -1,0 +1,18 @@
+<div class="column is-2">
+    <aside class="menu is-hidden-mobile is-flex is-flex-direction-column">
+        <p class="menu-label">
+            General
+        </p>
+        <ul class="menu-list">
+            <li><a class="is-active">Dashboard</a></li>
+            <li><a>Chat History</a></li>
+            <li><a>Other</a>
+                <ul>
+                    <li><a href="{% url 'TicketingApp:create' %}">New Ticket</a></li>
+                    <li><a href="{% url 'TicketingApp:view' %}">My Tickets</a></li>
+                    <li><a href="{% url 'TicketingApp:view' %}">All Site Tickets</a></li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+</div>

@@ -4,116 +4,148 @@
 {% endblock %}
 
 {% block content %}
-    <main class="columns">
-        <div class="container is-flex is-justify-content-center is-align-items-flex-start">
-            <div class="column is-two-fifths">
-                <div class="field">
-                    <label class="label">Transaction Date</label>
-                    <div class="control">
-                        <input class="input" type="date" name="transaction_date">
-                        <script>
-                            let today = new Date().toISOString().split('T')[0];
-                            document.getElementsByName("transaction_date")[0].setAttribute('value', today);
-                        </script>
-                    </div>
-                </div>
+    <main class="container">
+        <div class="columns">
+            {% include 'TicketingApp/side_nav.html' %}
+            <div class="column is-9">
+                {% include 'TicketingApp/nav_tree.html' %}
+                <form method="post" class="is-flex is-justify-content-center is-align-items-flex-start ">
+                    {% csrf_token %}
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Reference</label>
+                            <div class="control">
+                                <input class="input" type="text" placeholder="Transaction Code or Ref Number"
+                                       name="reference">
+                                <p class="help is-info">Required</p>
+                            </div>
+                        </div>
 
-                <div class="field">
-                    <label class="label">Safaricom Phone Number</label>
-                    <div class="control">
-                        <input class="input" type="text" inputmode="number" required name="safaricom_no">
-                    </div>
-                    <p class="help is-info">Required</p>
-                </div>
+                        <div class="field">
+                            <label class="label">Safaricom Phone Number</label>
+                            <div class="control">
+                                <input class="input" type="text" inputmode="number" required name="safaricom_no">
+                            </div>
+                            <p class="help is-info">Required</p>
+                        </div>
 
-                <div class="field">
-                    <label class="label">Airtel Phone Number</label>
-                    <div class="control">
-                        <input class="input" type="text" inputmode="number" required name="airtel_no">
-                    </div>
-                    <p class="help is-info">Required</p>
-                </div>
+                        <div class="field">
+                            <label class="label">Airtel Phone Number</label>
+                            <div class="control">
+                                <input class="input" type="text" inputmode="number" required name="airtel_no">
+                            </div>
+                            <p class="help is-info">Required</p>
+                        </div>
 
-                <div class="field">
-                    <label class="label">Amount</label>
-                    <div class="control">
-                        <input class="input" type="number" value="0" name="amount" required>
-                        <p class="help is-info">Required</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="column is-two-fifths">
-                <div class="field">
-                    <label class="label">Name</label>
-                    <div class="control">
-                        <input class="input" type="text" placeholder="Sender Name or Identifier" name="name">
-                        <p class="help is-success">Optional</p>
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label class="label">Issue</label>
-                    <div class="control">
-                        <div class="select">
-                            <select name="issues">
-                                <option value="EA">Excess Airtime</option>
-                                <option value="BWN">Buying To Wrong Number</option>
-                                <option value="NC">Not Credited</option>
-                                <option value="O">Other</option>
-                            </select>
+                        <div class="field">
+                            <label class="label">Amount</label>
+                            <div class="control">
+                                <input class="input" type="number" value="0" name="amount" required>
+                                <p class="help is-info">Required</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="field">
-                    <label class="label">Company</label>
-                    <div class="control">
-                        <div class="select">
-                            <select name="company">
-                                <option value="None">Choose</option>
-                                <option value="safaricom">Safaricom</option>
-                                <option value="airtel">Airtel</option>
-                                <option value="leizam">Leizam Ventures</option>
-                            </select>
+                    <div class="column">
+                        <div class="field">
+                            <label class="label">Name</label>
+                            <div class="control">
+                                <input class="input" type="text" placeholder="Sender Name or Identifier" name="name">
+                                <p class="help is-success">Optional</p>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Issue</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="issue">
+                                        <option value="EA">Excess Airtime</option>
+                                        <option value="BWN">Buying To Wrong Number</option>
+                                        <option value="NC">Not Credited</option>
+                                        <option value="O">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <p class="help is-success">Optional</p>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Company</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="company">
+                                        <option value="None">Choose</option>
+                                        <option value="safaricom">Safaricom</option>
+                                        <option value="airtel">Airtel</option>
+                                        <option value="leizam">Leizam Ventures</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <p class="help is-success">Optional</p>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Paybill</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="paybill_no" required>
+                                        {% for paybill in paybills %}
+                                            <option value="{{ paybill }}">{{ paybill }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <p class="help is-success">Optional</p>
                         </div>
                     </div>
-                    <p class="help is-success">Optional</p>
-                </div>
 
-                <div class="field">
-                    <label class="label">Additional Info</label>
-                    <div class="control">
+                    <div class="column">
+                        <label class="label">Transaction Date</label>
+                        <div class="control">
+                            <input class="input" type="date" name="transaction_date">
+                            <script>
+                                let today = new Date().toISOString().split('T')[0];
+                                document.getElementsByName("transaction_date")[0].setAttribute('value', today);
+                            </script>
+                            <p class="help is-success">Default is today</p>
+                        </div>
+
+                        <div class="field mt-3">
+                            <label class="label">Additional Info</label>
+                            <div class="control">
                     <textarea class="textarea" placeholder="Anything You Think We Should Know?" rows="1"
                               name="a_info"></textarea>
-                    </div>
-                </div>
-            </div>
+                            </div>
+                            <p class="help is-success">Optional</p>
+                        </div>
 
-            <div class="column is-align-self-flex-end mb-5">
-                <div class="field">
-                    <label class="label">Elevation</label>
-                    <div class="control">
-                        <label class="radio">
-                            <input type="radio" name="urgency" value="urgent">
-                            Urgent
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="urgency" value="emergency">
-                            Emergency
-                        </label>
-                    </div>
-                    <p class="help is-success">Optional</p>
-                </div>
+                        <div class="field">
+                            <label class="label">Elevation</label>
+                            <div class="control">
+                                <label class="radio">
+                                    <input type="radio" name="urgency" value="urgent">
+                                    Urgent
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="urgency" value="emergency">
+                                    Emergency
+                                </label>
+                            </div>
+                            <p class="help is-success">Optional</p>
+                        </div>
 
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button class="button is-link" type="submit">Submit</button>
+                        <div class="field is-grouped mt-6">
+                            <div class="control">
+                                <button class="button is-link" type="submit">Submit</button>
+                            </div>
+                            <div class="control">
+                                <button class="button is-link is-light" type="reset">Cancel</button>
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="control">
-                        <button class="button is-link is-light" type="reset">Cancel</button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </main>
